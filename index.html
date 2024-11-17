@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLDT - Under Repair</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            height: 100%;
+            overflow: hidden;
+        }
+        .container {
+            height: 100vh;
+            background: linear-gradient(to bottom right, #ff0000, #800080, #0000ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            max-width: 24rem;
+            width: 100%;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            z-index: 10;
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: -4.5rem;
+            margin-top: -5.5rem;
+        }
+        .logo img {
+            height: 13rem;
+            width: 20rem;
+        }
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: white;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        p {
+            font-weight: 400;
+            color: white;
+            text-align: center;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        .timer-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            text-align: center;
+            line-height: 1;
+        }
+        .small-text {
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <div class="logo">
+                <img src="https://download.logo.wine/logo/PLDT/PLDT-Logo.wine.png" alt="PLDT Logo">
+            </div>
+            <h1>We're Under Repair</h1>
+            <p>Our wifi is currently undergoing scheduled maintenance. We'll be back shortly.</p>
+            <div class="timer-container">
+                <p class="small-text">Estimated time remaining:</p>
+                <p class="timer" id="countdown">00:00</p>
+            </div>
+            <p class="small-text">Thank you for your patience. If you need immediate assistance, please contact our support team.</p>
+        </div>
+    </div>
+
+    <script>
+        // Create bubbles
+        const container = document.querySelector('.container');
+        for (let i = 0; i < 20; i++) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            bubble.style.left = `${Math.random() * 100}%`;
+            bubble.style.top = `${Math.random() * 100}%`;
+            bubble.style.width = `${Math.random() * 100 + 50}px`;
+            bubble.style.height = bubble.style.width;
+            bubble.style.animation = `float ${Math.random() * 10 + 5}s ease-in-out infinite`;
+            container.appendChild(bubble);
+        }
+
+// Try to get timeLeft from localStorage, if it exists
+let timeLeft = localStorage.getItem('timeLeft');
+if (timeLeft === null) {
+    timeLeft = 3600; // Set to 1 hour if not found
+} else {
+    timeLeft = parseInt(timeLeft, 10); // Parse it as a number
+}
+
+const countdownElement = document.getElementById('countdown');
+
+function updateCountdown() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    if (timeLeft > 0) {
+        timeLeft--;
+        localStorage.setItem('timeLeft', timeLeft); // Save updated timeLeft to localStorage
+        setTimeout(updateCountdown, 1000);
+    } else {
+        localStorage.removeItem('timeLeft'); // Remove it when the countdown is done
+    }
+}
+
+updateCountdown();
+    </script>
+</body>
+</html>
